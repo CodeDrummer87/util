@@ -10,7 +10,7 @@ public class FileRecordMode {
 
     public boolean isAppended = false;
     public boolean areStatistics = false;
-    public boolean areFullStatistics = false;
+    public boolean isBrief = false;
 
     public FileRecordMode(List<String> options) {
         for (int i = 0; i < options.size(); i++) {
@@ -24,8 +24,8 @@ public class FileRecordMode {
                     prefix = options.get(++i);
                     break;
                 case "-a": isAppended = true; break;
-                case "-s": areStatistics = true; break;
-                case "-f": areFullStatistics = true; break;
+                case "-s": areStatistics = true; isBrief = true; break;
+                case "-f": areStatistics = true; isBrief = false; break;
                 default:
                     System.out.println(".:: Указана некорректная опция: " + options.get(i));
             }

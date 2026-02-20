@@ -15,7 +15,7 @@ public class Main {
                 utils.readFromFile(file);
             }
 
-            utils.createFiles();
+            utils.getOutputData();
         } else {
             System.out.println(".:: Среди аргументов нет файлов");
         }

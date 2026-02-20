@@ -28,11 +28,12 @@ public class FileUtils {
         var values = line.split(" ");
         StringBuilder string = new StringBuilder();
         for (String val: values) {
-            if (val.contains(".") && (Character.isDigit(val.charAt(0)) || val.charAt(0) == '-')) {
+            boolean isDigitCondition = Character.isDigit(val.charAt(0)) || val.charAt(0) == '-';
+            if (val.contains(".") && isDigitCondition) {
                 floats.add(val);
                 continue;
             }
-            if ((Character.isDigit(val.charAt(0)) || val.charAt(0) == '-') && !val.contains(".")) {
+            if (!val.contains(".") && isDigitCondition) {
                 integers.add(val);
                 continue;
             }
@@ -43,13 +44,28 @@ public class FileUtils {
         }
     }
 
-    public void createFiles() {
+    public void getOutputData() {
         String path = mode.hasNewPath ? mode.getNewPath() : "";
         String prefix = mode.hasPrefix ? mode.getPrefix() : "";
 
-        if (!integers.isEmpty()) writeToFile(path + prefix + "integers.txt", integers);
-        if (!floats.isEmpty()) writeToFile(path + prefix + "floats.txt", floats);
-        if (!strings.isEmpty()) writeToFile(path + prefix + "strings.txt", strings);
+        if (!integers.isEmpty()) {
+            writeToFile(path + prefix + "integers.txt", integers);
+            if (mode.areStatistics) {
+                displayStatistics(mode.isBrief, integers, "целым числам");
+            }
+        }
+        if (!floats.isEmpty()) {
+            writeToFile(path + prefix + "floats.txt", floats);
+            if (mode.areStatistics) {
+                displayStatistics(mode.isBrief, floats, "дробным числам");
+            }
+        }
+        if (!strings.isEmpty()) {
+            writeToFile(path + prefix + "strings.txt", strings);
+            if (mode.areStatistics) {
+                displayStatistics(mode.isBrief, strings, "строкам");
+            }
+        }
     }
 
     private void writeToFile(String fileName, List<String> list) {
@@ -60,5 +76,42 @@ public class FileUtils {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    private void displayStatistics(boolean isBrief, List<String> list, String target) {
+        if (isBrief) {
+            displayBriefStatistics(list, target);
+        } else {
+            displayFullStatistics(list, target);
+        }
+    }
+
+    private void displayBriefStatistics(List<String> list, String target) {
+        System.out.println("\n.:: Краткая статистика по " + target + " :::");
+        getLine('-', 45);
+        System.out.println("записано элементов: " + list.size());
+    }
+
+    private void displayFullStatistics(List<String> list, String target) {
+        DataUtils dataUtils = new DataUtils();
+        System.out.println("\n.:: Полная статистика по " + target + " :::");
+        getLine('-', 45);
+        System.out.println("записано элементов: " + list.size());
+        if (target.contains("числ")) {
+            System.out.println("минимальное значение: " + dataUtils.getMinValue(list));
+            System.out.println("максимальное значение: " + dataUtils.getMaxValue(list));
+            System.out.println("сумма: " + dataUtils.getSum(list));
+            System.out.println("среднее значение: " + dataUtils.getAverage(list));
+        } else {
+            System.out.println("размер самой короткой строки: " + dataUtils.getMinLength(list));
+            System.out.println("размер самой длинной строки: " + dataUtils.getMaxLength(list));
+        }
+    }
+
+    private void getLine(char ch, int n) {
+        for (int i = 0; i < n; i++) {
+            System.out.print(ch);
+        }
+        System.out.println();
     }
 }
