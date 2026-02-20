@@ -8,6 +8,12 @@ public class FileUtils {
     private final List<String> floats = new ArrayList<>();
     private final List<String> strings = new ArrayList<>();
 
+    private FileRecordMode mode;
+
+    public FileUtils(FileRecordMode mode) {
+        this.mode = mode;
+    }
+
     public void readFromFile(String path) {
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             String line;
@@ -38,13 +44,16 @@ public class FileUtils {
     }
 
     public void createFiles() {
-        if (!integers.isEmpty()) writeToFile("integers.txt", integers);
-        if (!floats.isEmpty()) writeToFile("floats.txt", floats);
-        if (!strings.isEmpty()) writeToFile("strings.txt", strings);
+        String path = mode.hasNewPath ? mode.getNewPath() : "";
+        String prefix = mode.hasPrefix ? mode.getPrefix() : "";
+
+        if (!integers.isEmpty()) writeToFile(path + prefix + "integers.txt", integers);
+        if (!floats.isEmpty()) writeToFile(path + prefix + "floats.txt", floats);
+        if (!strings.isEmpty()) writeToFile(path + prefix + "strings.txt", strings);
     }
 
     private void writeToFile(String fileName, List<String> list) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, mode.isAppended))) {
             for (String line : list) {
                 writer.write(line + '\n');
             }
