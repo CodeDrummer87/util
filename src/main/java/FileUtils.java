@@ -22,11 +22,11 @@ public class FileUtils {
         var values = line.split(" ");
         StringBuilder string = new StringBuilder();
         for (String val: values) {
-            if (line.contains(".") && (Character.isDigit(val.charAt(0)) || val.charAt(0) == '-')) {
+            if (val.contains(".") && (Character.isDigit(val.charAt(0)) || val.charAt(0) == '-')) {
                 floats.add(val);
                 continue;
             }
-            if ((Character.isDigit(line.charAt(0)) || val.charAt(0) == '-') && !line.contains(".")) {
+            if ((Character.isDigit(val.charAt(0)) || val.charAt(0) == '-') && !val.contains(".")) {
                 integers.add(val);
                 continue;
             }
