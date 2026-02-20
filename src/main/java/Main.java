@@ -15,7 +15,8 @@ public class Main {
             for (String file : files) {
                 utils.readFromFile(file);
             }
-            utils.displayData();
+
+            utils.createFiles();
         } else {
             System.out.println(".:: Среди аргументов нет файлов");
         }

@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,17 +37,19 @@ public class FileUtils {
         }
     }
 
-    public void displayData() {
-        System.out.println("\n.:: Целые числа:");
-        for (String i: integers)
-            System.out.println(i);
+    public void createFiles() {
+        if (!integers.isEmpty()) writeToFile("integers.txt", integers);
+        if (!floats.isEmpty()) writeToFile("floats.txt", floats);
+        if (!strings.isEmpty()) writeToFile("strings.txt", strings);
+    }
 
-        System.out.println("\n.:: Дробные числа:");
-        for (String f: floats)
-            System.out.println(f);
-
-        System.out.println("\n.:: Строки:");
-        for (String s: strings)
-            System.out.println(s);
+    private void writeToFile(String fileName, List<String> list) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            for (String line : list) {
+                writer.write(line + '\n');
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
