@@ -47,6 +47,10 @@ public class FileUtils {
     public void getOutputData() {
         String path = mode.hasNewPath ? mode.getNewPath() : "";
         String prefix = mode.hasPrefix ? mode.getPrefix() : "";
+        if (mode.hasNewPath) {
+            checkDirectory(path);
+            path += File.separator;
+        }
 
         if (!integers.isEmpty()) {
             writeToFile(path + prefix + "integers.txt", integers);
@@ -113,5 +117,12 @@ public class FileUtils {
             System.out.print(ch);
         }
         System.out.println();
+    }
+
+    private void checkDirectory(String path) {
+        File dir = new File(path);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
     }
 }
