@@ -16,12 +16,18 @@ public class FileRecordMode {
         for (int i = 0; i < options.size(); i++) {
             switch (options.get(i)) {
                 case "-o":
-                    hasNewPath = true;
-                    newPath = options.get(++i);
+                    if (isCorrectIndex(i + 1, options)) {
+                        hasNewPath = true;
+                        newPath = options.get(++i);
+                    } else
+                        System.out.println(".:: Некорректный путь для выходных файлов");
                     break;
                 case "-p":
-                    hasPrefix = true;
-                    prefix = options.get(++i);
+                    if (isCorrectIndex(i + 1, options)) {
+                        hasPrefix = true;
+                        prefix = options.get(++i);
+                    } else
+                        System.out.println(".:: Некорректный префикс");
                     break;
                 case "-a": isAppended = true; break;
                 case "-s": areStatistics = true; isBrief = true; break;
@@ -38,5 +44,9 @@ public class FileRecordMode {
 
     public String getPrefix() {
         return prefix;
+    }
+
+    private boolean isCorrectIndex(int index, List<String> list) {
+        return index < list.size() && !list.get(index).startsWith("-");
     }
 }

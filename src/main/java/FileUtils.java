@@ -52,22 +52,21 @@ public class FileUtils {
             path += File.separator;
         }
 
-        if (!integers.isEmpty()) {
-            writeToFile(path + prefix + "integers.txt", integers);
+        if (!integers.isEmpty())
+            displayData(path + prefix + "integers.txt", integers, "целым числам");
+
+        if (!floats.isEmpty())
+            displayData(path + prefix + "floats.txt", floats, "дробным числам");
+
+        if (!strings.isEmpty())
+            displayData(path + prefix + "strings.txt", strings, "строкам");
+    }
+
+    private void displayData(String path, List<String> list, String description) {
+        if (!list.isEmpty()) {
+            writeToFile(path, list);
             if (mode.areStatistics) {
-                displayStatistics(mode.isBrief, integers, "целым числам");
-            }
-        }
-        if (!floats.isEmpty()) {
-            writeToFile(path + prefix + "floats.txt", floats);
-            if (mode.areStatistics) {
-                displayStatistics(mode.isBrief, floats, "дробным числам");
-            }
-        }
-        if (!strings.isEmpty()) {
-            writeToFile(path + prefix + "strings.txt", strings);
-            if (mode.areStatistics) {
-                displayStatistics(mode.isBrief, strings, "строкам");
+                displayStatistics(mode.isBrief, list, description);
             }
         }
     }
