@@ -1,15 +1,18 @@
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 
 public class DataUtils {
 
-    public float getMinValue(List<String> list) {
-        float min = 0.f;
+    public BigDecimal getMinValue(List<String> list) {
+        BigDecimal min = BigDecimal.ZERO;
         try {
-            min = Float.parseFloat(list.getFirst());
-            for (String integer: list) {
-                float value = Float.parseFloat(integer);
-                if (value < min)
+            min = new BigDecimal(list.getFirst());
+            for (String integer : list) {
+                BigDecimal value = new BigDecimal(integer);
+                if (value.compareTo(min) < 0) {
                     min = value;
+                }
             }
         } catch (NumberFormatException e) {
             System.out.println(e.getMessage());
@@ -17,14 +20,14 @@ public class DataUtils {
         return min;
     }
 
-    public float getMaxValue(List<String> list) {
-        float max = 0.f;
+    public BigDecimal getMaxValue(List<String> list) {
+        BigDecimal max = BigDecimal.ZERO;
         try {
-            max = Float.parseFloat(list.getFirst());
             for (String integer : list) {
-                float value = Float.parseFloat(integer);
-                if (value > max)
+                BigDecimal value = new BigDecimal(integer);
+                if (value.compareTo(max) > 0) {
                     max = value;
+                }
             }
         } catch (NumberFormatException e) {
             System.out.println(e.getMessage());
@@ -32,26 +35,22 @@ public class DataUtils {
         return max;
     }
 
-    public float getSum(List<String> list) {
-        float sum = 0.f;
+    public BigDecimal getSum(List<String> list) {
+        BigDecimal sum = BigDecimal.ZERO;
         try {
-            for (String integer : list)
-                sum += (Float.parseFloat(integer));
+            for (String integer : list) {
+                sum = sum.add(new BigDecimal(integer));
+            }
         } catch (NumberFormatException e) {
             System.out.println(e.getMessage());
         }
         return sum;
     }
 
-    public float getAverage(List<String> list) {
-        float sum = 0;
-        try {
-            for (String integer : list)
-                sum += (Float.parseFloat(integer));
-        } catch (NumberFormatException e) {
-            System.out.println(e.getMessage());
-        }
-        return sum / list.size();
+    public BigDecimal getAverage(List<String> list) {
+        BigDecimal sum = getSum(list);
+        BigDecimal count = new BigDecimal(list.size());
+        return sum.divide(count, RoundingMode.DOWN);
     }
 
     public int getMinLength(List<String> list) {
